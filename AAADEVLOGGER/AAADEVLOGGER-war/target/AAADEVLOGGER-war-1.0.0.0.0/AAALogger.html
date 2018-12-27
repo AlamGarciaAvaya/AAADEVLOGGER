@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Logger Help</title>
+</head>
+
+<body style="font-family: 'Times New Roman', Times, serif">
+    <h2 style="color:rgb(204, 0, 82)">Logger</h2>
+    <h4 style="font: bold">Descripción de la tarea</h4>
+    <p>Esta tarea sirve para imprimir un registro de log de acuerdo a los diferentes niveles.</p>
+
+    <h4 style="font: bold">Propiedades de la tarea</h4>
+    <ul>
+        <li>Nivel Log - Un WorkFlow debe usar esta tarea dinámica para el registro de depuración. Este registrador proporciona varios niveles diferentes para indicar la gravedad del mensaje de registro; De lo más severo a lo menos severo, los niveles son:</li>
+        <ul>
+            <li>FATAL: indica un evento muy grave que hará que el servicio falle </li>
+            <li>ERROR: indica un ERROR grave, pero el servicio puede continuar </li>
+            <li>WARN: indica un problema posiblemente dañino, pero el servicio continúa</li>
+            <li>INFO - indica un mensaje de información</li>
+            <li>FINE: indica un mensaje de granularidad más fina que INFO</li>
+            <li>FINER: indica un mensaje de granularidad más fina que FINE</li>
+            <li>FINEST - indica un mensaje con la mayor granularidad</li>
+        </ul>
+        <li>LogMessage - Mensaje que se desea escribir en el log del workflow</li>
+    </ul>
+    <h4 style="font: bold">Input schema</h4>
+    <ul>
+        <li>LogMessage - Texto que se incluir en el mensaje del log</li>
+        <li>Nivel - indicar la gravedad del mensaje de registro</li>
+    </ul>
+
+    <h4 style="font: bold">Output schema</h4>
+    <ul>
+        <li>status - Indica el estado de la ejecución de la tarea (Success o Failure)</li>
+    </ul>
+
+    <h4>Formato del Log</h4>
+    <p>"Fecha" + " " + "Hora" + "_" + “WorkFlowName” + ”_” + “WorkFlowVersion” + ”_” + ”NúmeroDeInstancia” + ”_”+ "Nivel" + "_" + "Label"+ ”MENSAJE”: </p>
+
+    <h4>Casos de uso</h4>
+    <p>log, historial de log o registro a la grabación secuencial en un archivo o en una base de datos de todos los acontecimientos (eventos o acciones) que afectan a un proceso particular (aplicación, actividad de una red informática, etc.). De esta forma
+        constituye una evidencia del comportamiento del sistema.</p>
+</body>
+
+</html>
