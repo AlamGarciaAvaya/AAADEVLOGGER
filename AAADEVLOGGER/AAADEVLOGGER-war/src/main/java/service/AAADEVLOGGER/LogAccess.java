@@ -35,14 +35,14 @@ public class LogAccess extends HttpServlet {
 
 		try {
 			String username = request.getParameter("usuario");
-			System.out.println(username);
+            String pais = request.getParameter("pais");
+            String cliente = request.getParameter("cliente");
 			FileWriter fichero = new FileWriter(
 					"home/wsuser/web/LogIn/Accesslogs.txt", true);
 			PrintWriter pw = new PrintWriter(fichero);
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date date = new Date(System.currentTimeMillis());
-			pw.println(df.format(date) + "_AAADEVLOGGER" + "_Usuario:"
-					+ username);
+            pw.println(df.format(date) +"_AAADEVLOGGER"+ "_Usuario:_" + username + "_País:_" + pais + "_Cliente:_" + cliente);
 			fichero.close();
 
 			response.setContentType("application/json");

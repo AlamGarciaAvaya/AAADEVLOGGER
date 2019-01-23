@@ -3,6 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+
+//Absolute Path 14/01/2019
+var absolutepath = getAbsolutePath();
+console.log(absolutepath);
+function getAbsolutePath() {
+    var loc = window.location;
+    var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
+    return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
+}
+
 validarSession();
 
 function validarSession() {
@@ -22,6 +33,7 @@ function cerrarSesion() {
 }
 
 var acc = document.getElementsByClassName("accordion");
+
 
 
 
@@ -197,7 +209,7 @@ function obtenerDesdeBreeze() {
                         }
                     });
 
-                    xhr.open("GET", "https://breeze2-132.collaboratory.avaya.com/services/AAADEVLOGGER/InputLogger/web/Transcript/" + archivosTexto["Index " + archivo + ""]);
+                    xhr.open("GET", absolutepath+"InputLogger/web/Log/" + archivosTexto["Index " + archivo + ""]);
                     xhr.send(data);
 
                 }, false);
@@ -214,7 +226,7 @@ function obtenerDesdeBreeze() {
                             obtenerDesdeBreeze();
                         }
                     });
-                    xhr.open("DELETE", "https://breeze2-132.collaboratory.avaya.com/services/AAADEVLOGGER/InputLogger/web/Transcript/" + archivosTexto["Index " + archivo + ""]);
+                    xhr.open("DELETE", absolutepath+"InputLogger/web/Log/" + archivosTexto["Index " + archivo + ""]);
                     xhr.send(data);
                 }, false);
 
@@ -246,7 +258,7 @@ function obtenerDesdeBreeze() {
         }
     });
 
-    xhr.open("GET", "https://breeze2-132.collaboratory.avaya.com/services/AAADEVLOGGER/Grabaciones/web/Transcript/");
+    xhr.open("GET", absolutepath+"Grabaciones/web/Log/");
 
     xhr.send(data);
 
@@ -386,7 +398,7 @@ function obtenerLogs(nombreArchivo) {
         }
     });
 
-    xhr.open("GET", "https://breeze2-132.collaboratory.avaya.com/services/AAADEVLOGGER/InputLogger/web/Transcript/" + nombreArchivo);
+    xhr.open("GET", absolutepath+"InputLogger/web/Log/" + nombreArchivo);
     xhr.send(data);
 
 }

@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Index</title>
+        <title>LogIn</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/style.css">
@@ -15,12 +15,17 @@ and open the template in the editor.
         <div class="bg-img">
             <form action="" class="container" method="post" id="fomulario_login">
                 <h1>Login</h1>
-
+                <label for="pais"><b>Pais</b></label>
+                <input type="text" placeholder="Pais" name="pais" required>
+                
+                <label for="empresa"><b>Cliente</b></label>
+                <input type="text" placeholder="Cliente" name="cliente" required>
+                
                 <label for="email"><b>Email</b></label>
-                <input type="text" placeholder="Enter Email" name="email" required>
+                <input type="text" placeholder="Email" name="email" required>
 
                 <label for="psw"><b>Password</b></label>
-                <input type="password" autocomplete="current-password" placeholder="Enter Password" name="psw" required >
+                <input type="password" autocomplete="current-password" placeholder="Contraseña" name="psw" required >
 
                 <input type="submit" value="Log In" id="submit_login" class="btn">
             </form>

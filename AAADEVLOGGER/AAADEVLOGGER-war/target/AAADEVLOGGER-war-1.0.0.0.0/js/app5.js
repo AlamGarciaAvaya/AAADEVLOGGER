@@ -20,6 +20,16 @@ function cerrarSesion() {
     sessionStorage.clear();
 }
 
+//Absolute Path 14/01/2019
+var absolutepath = getAbsolutePath();
+
+function getAbsolutePath() {
+    var loc = window.location;
+    var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
+    return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
+}
+
+
 // Obtener datos del formulario
 var sumbit = document.getElementById('submit_linux_command');
 var formulario = document.getElementById('fomulario_linux_command');
@@ -190,7 +200,7 @@ function doGetCommand() {
                     }
                 });
 
-                xhr.open("GET", "https://breeze2-132.collaboratory.avaya.com/services/AAADEVLOGGER/Command?command=" + object.command);
+                xhr.open("GET", absolutepath+"Command?command=" + object.command);
                 xhr.send(data);
 
             }, false);
@@ -223,7 +233,7 @@ function doGetCommand() {
 
     });
 
-    xhr.open("GET", "https://breeze2-132.collaboratory.avaya.com/services/AAADEVLOGGER/Command?command=" + object.command);
+    xhr.open("GET", absolutepath+"Command?command=" + object.command);
     xhr.send(data);
 
 }

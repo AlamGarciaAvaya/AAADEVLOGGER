@@ -23,7 +23,6 @@ import org.json.JSONObject;
 
 import service.util.Arrays;
 
-import com.avaya.collaboration.util.logger.Logger;
 
 /**
  *
@@ -33,7 +32,7 @@ import com.avaya.collaboration.util.logger.Logger;
 @WebServlet(urlPatterns = {"/InputLogger/*"})
 public class InputLogger extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private transient final Logger logger = Logger.getLogger(InputLogger.class);
+//    private transient final Logger logger = Logger.getLogger(InputLogger.class);
 
     String userHomeDir = null;
     String osName = null;
@@ -135,7 +134,7 @@ public class InputLogger extends HttpServlet {
             saveAudioFile.flush();
             saveAudioFile.close();
             responseJson.put("status", "file saved successfully on web server");
-            responseJson.put("grabacion", recFileName);
+            responseJson.put("Archivo", recFileName);
             responseJson.put("Absolute Path", transcriptFile.getAbsolutePath());
         } catch (final Exception e) {
             e.printStackTrace();

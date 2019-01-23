@@ -8,11 +8,21 @@ var sumbit = document.getElementById('submit_login');
 var formulario = document.getElementById('fomulario_login');
 var action = formulario.getAttribute('action');
 
+var absolutePath = getAbsolutePath();
+
+function getAbsolutePath() {
+    var loc = window.location;
+    var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
+    return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
+}
+
+
 //Event Listener al botón Submit
 sumbit.addEventListener('click', function (e) {
     e.preventDefault();
     doGetArchivo();
 });
+
 
 
 function doGetArchivo() {
@@ -32,49 +42,48 @@ function doGetArchivo() {
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
             var json = JSON.parse(this.responseText);
-            for (var i = 0; i < json.length; i++) {
-                if (object.email === json[i].username && object.psw === json[i].password) {
-                    console.log("Correcto");
 
-                    sessionStorage.setItem('usuarioActivo', true);
+            if (object.pais === "" || object.cliente === "" || object.email === "" || object.psw === "") {
+                Swal({
+                    type: 'error',
+                    title: 'Error',
+                    text: 'Favor de llenar todos los campos',
 
-                    Swal({
-                        position: 'center',
-                        type: 'success',
-                        title: 'Log in exitoso',
-                        showConfirmButton: false,
-                        timer: 3000
-                    });
-                    
-                    makePost(json[i].username);
-                    
-                    
-                    
-                    break;
-
-                } else {
-                    console.log("Incorrecto");
-                    Swal({
-                        type: 'error',
-                        title: 'Error',
-                        text: 'Usuario y/o contrasseña incorrectos',
-
-                    });
-
+                });
+            } else {
+                for (var i = 0; i < json.length; i++) {
+                    if (object.email === json[i].username && object.psw === json[i].password) {
+                        console.log("Correcto");
+                        sessionStorage.setItem('usuarioActivo', true);
+                        Swal({
+                            position: 'center',
+                            type: 'success',
+                            title: 'Log in exitoso',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                        makePost(json[i].username, object.pais, object.cliente);
+                        break;
+                    } else {
+                        console.log("Incorrecto");
+                        Swal({
+                            type: 'error',
+                            title: 'Error',
+                            text: 'Usuario y/o contrasseña incorrectos',
+                        });
+                    }
                 }
 
             }
-
         }
     });
-
-    xhr.open("GET", "https://breeze2-132.collaboratory.avaya.com/services/AAADEVLOGGER/ReadText/web/LogIn/Access.txt");
+    xhr.open("GET", absolutePath+"ReadText/web/LogIn/Access.txt");
 
     xhr.send(data);
 }
 
 
-function makePost(usuario) {
+function makePost(usuario, pais, cliente) {
 
 
     var data = null;
@@ -90,7 +99,7 @@ function makePost(usuario) {
         }
     });
 
-    xhr.open("POST", "https://breeze2-132.collaboratory.avaya.com/services/AAADEVLOGGER/LogAccess?usuario=" + usuario);
+    xhr.open("POST", absolutePath+"LogAccess?usuario=" + usuario +"&pais="+pais+"&cliente="+cliente);
 
     xhr.send(data);
 }
