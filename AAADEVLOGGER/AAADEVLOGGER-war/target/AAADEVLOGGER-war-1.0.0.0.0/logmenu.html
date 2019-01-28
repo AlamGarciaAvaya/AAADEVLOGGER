@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/style2.css">
+        <link rel="stylesheet" href="css/tableexport.min.css" >
         <script src="js/sweetAlertmin.js"></script>
 
 
@@ -18,25 +19,37 @@
             }
         </style>
     </head>
-    <body id="htmlBody">
+    <body id="htmlBody" onload="mueveReloj()">
 
         <div class="header">
+            <form name="form_reloj"> 
+                <input type="text" name="reloj" size="35" style="background-color : #cc0000; color : White; font-family : Verdana, Arial, Helvetica; font-size : 10pt; border: none; text-align : center; float: right" onfocus="window.document.form_reloj.reloj.blur()"> 
+            </form>
             <h1>AVAYA</h1>
             <p>AAA Engagement Logs</p>
         </div>
         <div class="navbar">
-            <a href="logmenu.html">AAA Engagement Logs</a>
+            <a href="logmenu.html" id="section">AAA Engagement Logs</a>
             <a href="logEngagement.html">Engagement Logs</a>
             <a href="breezeLogs.html">Breeze Logs</a>
             <a href="RecordParticipant.html">Record Participant</a>
             <a href="AAACallRecording.html">AAA Call Recording</a>
             <a href="AAALogger.html" target="_blank" onclick="window.open(this.href, this.target, 'width=300,height=400'); return false;" class="right">Help</a>
-            <a href="index.html" class="right" onclick="cerrarSesion()">Cerrar Session</a>
+            <a href="index.html" class="right" onclick="cerrarSesion()">Close Session</a>
         </div>
 
 
-    </body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/xlsx.core.min.js"></script>
+        <script type="text/javascript" src="js/Blob.min.js"></script>
+        <script type="text/javascript" src="js/FileSaver.min.js"></script>
+        <script type="text/javascript" src="js/tableexport.min.js"></script>
+
+        <script src="js/app2.js"></script>
     
-    <script src="js/app2.js"></script>
-    <script src="js/jquery.js"></script>
+
+    </body>
+
 </html>

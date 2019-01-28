@@ -4,33 +4,50 @@
  * and open the template in the editor.
  */
 
-validarSession();
-
-function validarSession() {
-    var session = sessionStorage.getItem('usuarioActivo');
-    console.log(session);
-    if (session === "true") {
-      
-        
-    } else {
-        window.location.href = "index.html";
-    }
-
-}
-
-function cerrarSesion() {
-    sessionStorage.clear();
-}
-
 //Absolute Path 14/01/2019
 var absolutepath = getAbsolutePath();
-
+console.log(absolutepath);
 function getAbsolutePath() {
     var loc = window.location;
     var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
     return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
 }
 
+
+validarSession();
+
+function validarSession() {
+    var session = sessionStorage.getItem('usuarioActivo');
+    console.log(session);
+    var section = document.getElementById('section');
+    section.className += 'activeLink';
+    if (session === "true") {
+
+
+    } else {
+        window.location.href = "index.html";
+    }
+
+}
+/*
+ * 
+ * Función para obtener la hora
+ */
+function mueveReloj() {
+
+    var today = new Date();
+    var todayThreeMinutesLess = new Date();
+    today = todayThreeMinutesLess.toLocaleString('en-US', {timeZone: 'America/Denver', hour12: false}).replace(', ', ' ');
+
+    horaImprimible = "Time Denver " + today;
+
+    document.form_reloj.reloj.value = horaImprimible;
+    setTimeout("mueveReloj()", 1000);
+}
+
+function cerrarSesion() {
+    sessionStorage.clear();
+}
 
 //Obtener datos del formulario
 var sumbit = document.getElementById('submit_linux_command');
@@ -71,6 +88,8 @@ function Accordion() {
 
 }
 
+var tableNumber = 0;
+
 function doGetBreezeLogs() {
     var fomulario = new FormData(formulario);
 //    console.log(formulario);
@@ -95,28 +114,28 @@ function doGetBreezeLogs() {
             nuevoButton.setAttribute("class", "accordion " + object.servicio);
             let nuevoDiv = document.createElement('DIV');
             nuevoDiv.setAttribute("class", "panel");
-            /*
-             * 
-             * Botones
-             */
-            let divBotones = document.createElement('DIV');
-            divBotones.setAttribute("class", "btn-group btn-group-lg");
-            //BOTON DESCARGAR
-            let botonDescargar = document.createElement('BUTTON');
-            botonDescargar.setAttribute("type", "button");
-            botonDescargar.setAttribute("class", "btn btn-default");
-            botonDescargar.setAttribute("id", object.servicio + "descargar");
-            let textoBotonDescargar = document.createTextNode("Descargar");
-            botonDescargar.appendChild(textoBotonDescargar);
-
-            divBotones.appendChild(botonDescargar);
+//            /*
+//             * 
+//             * Botones
+//             */
+//            let divBotones = document.createElement('DIV');
+//            divBotones.setAttribute("class", "btn-group btn-group-lg");
+//            //BOTON DESCARGAR
+//            let botonDescargar = document.createElement('BUTTON');
+//            botonDescargar.setAttribute("type", "button");
+//            botonDescargar.setAttribute("class", "btn btn-default");
+//            botonDescargar.setAttribute("id", object.servicio + "descargar");
+//            let textoBotonDescargar = document.createTextNode("Descargar");
+//            botonDescargar.appendChild(textoBotonDescargar);
+//
+//            divBotones.appendChild(botonDescargar);
             /*
              * 
              * Creación de la tabla
              */
             let table = document.createElement('TABLE');
             table.setAttribute("class", "table table-striped table-sm");
-            table.setAttribute("id", object.servicio);
+            table.setAttribute("id", object.servicio + tableNumber);
 
 
             let thead = document.createElement('THEAD');
@@ -124,20 +143,20 @@ function doGetBreezeLogs() {
             //TH-RESULTADOS
             let thResultados = document.createElement('TH');
             thResultados.setAttribute("id", "th-sm" + object.servicio);
-            let iResultados = document.createElement('i');
-            iResultados.setAttribute("class", "fa fa-sort float-right");
-            iResultados.setAttribute("aria-hidden", "true");
+//            let iResultados = document.createElement('i');
+//            iResultados.setAttribute("class", "fa fa-sort float-right");
+//            iResultados.setAttribute("aria-hidden", "true");
             let thResultadosTexto = document.createTextNode("Resultados");
-            thResultados.appendChild(iResultados);
+//            thResultados.appendChild(iResultados);
             thResultados.appendChild(thResultadosTexto);
             //TH-Numero-Resultados
             let thlineas = document.createElement('TH');
             thlineas.setAttribute("id", "th-sm1" + object.servicio);
-            let ilineas = document.createElement('i');
-            ilineas.setAttribute("class", "fa fa-sort float-right");
-            ilineas.setAttribute("aria-hidden", "true");
+//            let ilineas = document.createElement('i');
+//            ilineas.setAttribute("class", "fa fa-sort float-right");
+//            ilineas.setAttribute("aria-hidden", "true");
             let thHoraTexto = document.createTextNode("Líneas");
-            thlineas.appendChild(ilineas);
+//            thlineas.appendChild(ilineas);
             thlineas.appendChild(thHoraTexto);
 
             //TBODY-Creanto atributos
@@ -155,7 +174,7 @@ function doGetBreezeLogs() {
             table.appendChild(tbody);
             nuevoDiv.appendChild(table);
 
-            document.body.appendChild(divBotones);
+//            document.body.appendChild(divBotones);
             document.body.appendChild(nuevoButton);
             document.body.appendChild(nuevoDiv);
 
@@ -186,24 +205,24 @@ function doGetBreezeLogs() {
                 tbody.appendChild(nuevoTBodyTr);
             }
 
-            //DESCARGAR ARCHIVO
-            document.getElementById(object.servicio + "descargar").addEventListener('click', function () {
-                var data = null;
-
-                var xhr = new XMLHttpRequest();
-                xhr.withCredentials = false;
-
-                xhr.addEventListener("readystatechange", function () {
-                    if (this.readyState === 4) {
-                        var lines = this.responseText.split('\n');
-                        descargarArchivo(generarTexto(lines), object.servicio);
-                    }
-                });
-
-                xhr.open("GET", absolutepath+"BreezeLogs?number=" + object.number + "&service=" + object.servicio + "&archivo=" + object.archivo);
-                xhr.send(data);
-
-            }, false);
+//            //DESCARGAR ARCHIVO
+//            document.getElementById(object.servicio + "descargar").addEventListener('click', function () {
+//                var data = null;
+//
+//                var xhr = new XMLHttpRequest();
+//                xhr.withCredentials = false;
+//
+//                xhr.addEventListener("readystatechange", function () {
+//                    if (this.readyState === 4) {
+//                        var lines = this.responseText.split('\n');
+//                        descargarArchivo(generarTexto(lines), object.servicio);
+//                    }
+//                });
+//
+//                xhr.open("GET", absolutepath+"BreezeLogs?number=" + object.number + "&service=" + object.servicio + "&archivo=" + object.archivo+"&filtro="+object.filtro);
+//                xhr.send(data);
+//
+//            }, false);
 
 
             acc[contador].addEventListener("click", function () {
@@ -225,13 +244,25 @@ function doGetBreezeLogs() {
                 }
 
             });
-
-            contador ++;
+            $("#" + object.servicio + tableNumber.toString()).tableExport({
+                headings: true, // (Boolean), display table headings (th/td elements) in the <thead>
+                formats: ["xls", "txt"], // (String[]), filetypes for the export
+                fileName: String, // (id, String), filename for the downloaded file
+                bootstrap: true, // (Boolean), style buttons using bootstrap
+                position: "top", // (top, bottom), position of the caption element relative to table
+                ignoreRows: null, // (Number, Number[]), row indices to exclude from the exported file(s)
+                ignoreCols: null, // (Number, Number[]), column indices to exclude from the exported file(s)
+                ignoreCSS: ".tableexport-ignore", // (selector, selector[]), selector(s) to exclude from the exported file(s)
+                emptyCSS: ".tableexport-empty", // (selector, selector[]), selector(s) to replace cells with an empty string in the exported file(s)
+                trimWhitespace: false              // (Boolean), remove all leading/trailing newlines, spaces, and tabs from cell text in the exported file(s)
+            });
+            contador++;
+            tableNumber++;
         }
 
     });
 
-    xhr.open("GET", absolutepath+"BreezeLogs?number=" + object.number + "&service=" + object.servicio + "&archivo=" + object.archivo);
+    xhr.open("GET", absolutepath+"BreezeLogs?number=" + object.number + "&service=" + object.servicio + "&archivo=" + object.archivo + "&filtro=" + object.filtro);
     xhr.send(data);
 
 

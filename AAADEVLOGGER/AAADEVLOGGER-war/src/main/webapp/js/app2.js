@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 
-
 //Absolute Path 14/01/2019
 var absolutepath = getAbsolutePath();
 console.log(absolutepath);
@@ -14,11 +13,14 @@ function getAbsolutePath() {
     return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
 }
 
+
 validarSession();
 
 function validarSession() {
     var session = sessionStorage.getItem('usuarioActivo');
     console.log(session);
+    var section = document.getElementById('section');
+    section.className += 'activeLink';
     if (session === "true") {
         obtenerDesdeBreeze();
     } else {
@@ -26,19 +28,34 @@ function validarSession() {
     }
 
 }
+/*
+ * 
+ * Función para obtener la hora
+ */
+function mueveReloj() {
+
+    var today = new Date();
+    var todayThreeMinutesLess = new Date();
+    today = todayThreeMinutesLess.toLocaleString('en-US', {timeZone: 'America/Denver', hour12: false}).replace(', ', ' ');
+
+    horaImprimible = "Time Denver " + today;
+
+    document.form_reloj.reloj.value = horaImprimible;
+    setTimeout("mueveReloj()", 1000);
+}
 
 
 function cerrarSesion() {
     sessionStorage.clear();
 }
 
+
 var acc = document.getElementsByClassName("accordion");
-
-
-
-
-
+var tableNumber = 0;
+var sortColum = 0;
+var tbodyNumber = 0;
 function obtenerDesdeBreeze() {
+
     var data = null;
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = false;
@@ -68,34 +85,46 @@ function obtenerDesdeBreeze() {
                 botonReload.setAttribute("type", "button");
                 botonReload.setAttribute("class", "btn btn-primary");
                 botonReload.setAttribute("onclick", "validar()");
-                let textoBotonReload = document.createTextNode("Recargar");
+                let textoBotonReload = document.createTextNode("Reload");
                 botonReload.appendChild(textoBotonReload);
                 //BOTON BORRAR    
                 let botonBorrar = document.createElement('BUTTON');
                 botonBorrar.setAttribute("type", "button");
                 botonBorrar.setAttribute("class", "btn btn-danger");
                 botonBorrar.setAttribute("id", archivosTexto["Index " + archivo + ""] + "borrar");
-                let textoBotonBorrar = document.createTextNode("Borrar");
+                let textoBotonBorrar = document.createTextNode("Delete");
                 botonBorrar.appendChild(textoBotonBorrar);
 
-                //BOTON DESCARGAR
-                let botonDescargar = document.createElement('BUTTON');
-                botonDescargar.setAttribute("type", "button");
-                botonDescargar.setAttribute("class", "btn btn-default");
-                botonDescargar.setAttribute("id", archivosTexto["Index " + archivo + ""] + "descargar");
-                let textoBotonDescargar = document.createTextNode("Descargar");
-                botonDescargar.appendChild(textoBotonDescargar);
+//                //BOTON DESCARGAR TXT
+//                let botonDescargartxt = document.createElement('BUTTON');
+//                botonDescargartxt.setAttribute("type", "button");
+//                botonDescargartxt.setAttribute("class", "btn btn-default txt");
+//                botonDescargartxt.setAttribute("tableexport-id", "6d0b00a3-txt");
+//                let textoBotonDescargar = document.createTextNode("Download .txt");
+//                botonDescargartxt.appendChild(textoBotonDescargar);
+//
+//                //BOTON DESCARGAR XLX
+//                let botonDescargarxlx = document.createElement('BUTTON');
+//                botonDescargarxlx.setAttribute("type", "button");
+//                botonDescargarxlx.setAttribute("class", "btn btn-default xls");
+//                botonDescargarxlx.setAttribute("tableexport-id", "6cd81ad4-xls");
+//                let textoBotonDescargarxlx = document.createTextNode("Download .xlx");
+//                botonDescargarxlx.appendChild(textoBotonDescargarxlx);
+
 
                 divBotones.appendChild(botonReload);
                 divBotones.appendChild(botonBorrar);
-                divBotones.appendChild(botonDescargar);
+//                divBotones.appendChild(botonDescargartxt);
+//                divBotones.appendChild(botonDescargarxlx);
+
                 /*
                  * 
                  * Creación de la tabla
                  */
                 let table = document.createElement('TABLE');
                 table.setAttribute("class", "table table-striped table-sm");
-                table.setAttribute("id", "dtBasicExample");
+                table.setAttribute("id", "TableNumber" + tableNumber + "");
+                tableNumber = tableNumber + 1;
                 table.setAttribute("style", "text-align:center;");
                 /*
                  * 
@@ -103,67 +132,82 @@ function obtenerDesdeBreeze() {
                  */
                 let thead = document.createElement('THEAD');
                 let tr = document.createElement('TR');
+
+
                 //TH-FECHA
                 let thFecha = document.createElement('TH');
-                thFecha.setAttribute("id", "th-sm" + archivo);
+                thFecha.setAttribute("id", "Fecha");
                 let iFecha = document.createElement('i');
                 iFecha.setAttribute("class", "fa fa-sort float-right");
+                iFecha.setAttribute("id", "sortColumn" + sortColum + "");
+                sortColum = sortColum + 1;
+                iFecha.setAttribute("onClick", "sort(this.id)");
                 iFecha.setAttribute("aria-hidden", "true");
-                let thFechaTexto = document.createTextNode("Fecha");
+                let thFechaTexto = document.createTextNode("Date");
                 thFecha.appendChild(iFecha);
                 thFecha.appendChild(thFechaTexto);
+
+
                 //TH-HORA
                 let thHora = document.createElement('TH');
-                thHora.setAttribute("id", "th-sm" + (archivo + 1));
+                thHora.setAttribute("id", "Hora");
                 let iHora = document.createElement('i');
                 iHora.setAttribute("class", "fa fa-sort float-right");
+                iHora.setAttribute("id", "sortColumn" + sortColum + "");
+                sortColum = sortColum + 1;
+                iHora.setAttribute("onClick", "sort(this.id)");
                 iHora.setAttribute("aria-hidden", "true");
-                let thHoraTexto = document.createTextNode("Hora");
+                let thHoraTexto = document.createTextNode("Time");
                 thHora.appendChild(iHora);
                 thHora.appendChild(thHoraTexto);
+
+
                 //TH-NOMBRE
                 let thNombre = document.createElement('TH');
-                thNombre.setAttribute("id", "th-sm" + (archivo + 2));
+                thNombre.setAttribute("id", "Nombre");
                 let iNombre = document.createElement('i');
-                iNombre.setAttribute("class", "fa fa-sort float-right");
+                iNombre.setAttribute("class", "fa fa-sort float-right icon");
+                iNombre.setAttribute("id", "sortColumn" + sortColum + "");
+                sortColum = sortColum + 1;
+                iNombre.setAttribute("onClick", "sort(this.id)");
                 iNombre.setAttribute("aria-hidden", "true");
-                let thNombreTexto = document.createTextNode("Nombre");
+                let thNombreTexto = document.createTextNode("Work Flow Name");
                 thNombre.appendChild(iNombre);
                 thNombre.appendChild(thNombreTexto);
+
+
                 //TH-VERSION
                 let thVersion = document.createElement('TH');
-                thVersion.setAttribute("id", "th-sm" + (archivo + 3));
-                let iVersion = document.createElement('i');
-                iVersion.setAttribute("class", "fa fa-sort float-right");
-                iVersion.setAttribute("aria-hidden", "true");
                 let thVersionTexto = document.createTextNode("Version");
-                thVersion.appendChild(iVersion);
                 thVersion.appendChild(thVersionTexto);
+
+
                 //TH-Numero-Instancia
                 let thNumInstancia = document.createElement('TH');
-                thNumInstancia.setAttribute("id", "th-sm" + (archivo + 4));
+                thNumInstancia.setAttribute("id", "Instancia");
                 let iNumInstancia = document.createElement('i');
-                iNumInstancia.setAttribute("class", "fa fa-sort float-right");
+                iNumInstancia.setAttribute("class", "fa fa-sort float-right icon");
+                iNumInstancia.setAttribute("id", "sortColumn" + sortColum + "");
+                sortColum = sortColum + 1;
+                iNumInstancia.setAttribute("onClick", "sort(this.id)");
                 iNumInstancia.setAttribute("aria-hidden", "true");
-                let thNumInstanciaTexto = document.createTextNode("Numero de Instancia");
+                let thNumInstanciaTexto = document.createTextNode("Instance");
                 thNumInstancia.appendChild(iNumInstancia);
                 thNumInstancia.appendChild(thNumInstanciaTexto);
+
                 //TH-NIVEL
                 let thNivel = document.createElement('TH');
-                thNivel.setAttribute("id", "th-sm" + archivo);
-                let iNivel = document.createElement('i');
-                iNivel.setAttribute("class", "fa fa-sort float-right");
-                iNivel.setAttribute("aria-hidden", "true");
-                let thNivelTexto = document.createTextNode("Nivel");
-                thNivel.appendChild(iNivel);
+                let thNivelTexto = document.createTextNode("Level");
                 thNivel.appendChild(thNivelTexto);
+
                 //TH-LABEL
                 let thLabel = document.createElement('TH');
                 let thLabelTexto = document.createTextNode("Label");
                 thLabel.appendChild(thLabelTexto);
+
                 //TH-MENSJAE
                 let thMensaje = document.createElement('TH');
-                let thMensajeTexto = document.createTextNode("Mensaje");
+                let thMensajeTexto = document.createTextNode("Message");
                 thMensaje.appendChild(thMensajeTexto);
 
                 //TBODY-Creanto atributos
@@ -195,26 +239,6 @@ function obtenerDesdeBreeze() {
                 obtenerLogs(archivosTexto["Index " + archivo + ""]);
 
 
-                //DESCARGAR ARCHIVO
-                document.getElementById(archivosTexto["Index " + archivo + ""] + "descargar").addEventListener('click', function () {
-                    var data = null;
-
-                    var xhr = new XMLHttpRequest();
-                    xhr.withCredentials = false;
-
-                    xhr.addEventListener("readystatechange", function () {
-                        if (this.readyState === 4) {
-                            var lines = this.responseText.split('\n');
-                            descargarArchivo(generarTexto(lines), archivosTexto["Index " + archivo + ""]);
-                        }
-                    });
-
-                    xhr.open("GET", absolutepath+"InputLogger/web/Log/" + archivosTexto["Index " + archivo + ""]);
-                    xhr.send(data);
-
-                }, false);
-
-
                 //BORRAR ARCHIVO
                 document.getElementById(archivosTexto["Index " + archivo + ""] + "borrar").addEventListener('click', function () {
                     var data = null;
@@ -230,33 +254,16 @@ function obtenerDesdeBreeze() {
                     xhr.send(data);
                 }, false);
 
-                var acomodarFecha = document.getElementById('th-sm0');
-                var acomodarHora = document.getElementById('th-sm1');
-                var acomodarNombre = document.getElementById('th-sm2');
-                var acomodarNivel = document.getElementById('th-sm3');
-
-                acomodarFecha.addEventListener('click', function () {
-                    acomodarValores();
-                });
-
-                acomodarHora.addEventListener('click', function () {
-                    sortTableHora();
-                });
-
-                acomodarNombre.addEventListener('click', function () {
-                    sortNombre();
-                });
-
-                acomodarNivel.addEventListener('click', function () {
-                    sortNivel();
-                });
-
             }
+
             Accordion();
 
 
+
         }
+
     });
+
 
     xhr.open("GET", absolutepath+"Grabaciones/web/Log/");
 
@@ -303,7 +310,7 @@ function Accordion() {
 
 }
 
-
+var obtenerLogsVar = 0;
 function obtenerLogs(nombreArchivo) {
     var data = null;
 
@@ -395,6 +402,21 @@ function obtenerLogs(nombreArchivo) {
                 }
                 tbody.appendChild(nuevoTBodyTr);
             }
+            var archivo = nombreArchivo.replace(".txt", "");
+            $("#TableNumber"+obtenerLogsVar.toString()).tableExport({
+                headings: true, // (Boolean), display table headings (th/td elements) in the <thead>
+                formats: ["xls", "txt"], // (String[]), filetypes for the export
+                fileName: archivo, // (id, String), filename for the downloaded file
+                bootstrap: true, // (Boolean), style buttons using bootstrap
+                position: "top", // (top, bottom), position of the caption element relative to table
+                ignoreRows: null, // (Number, Number[]), row indices to exclude from the exported file(s)
+                ignoreCols: null, // (Number, Number[]), column indices to exclude from the exported file(s)
+                ignoreCSS: ".tableexport-ignore", // (selector, selector[]), selector(s) to exclude from the exported file(s)
+                emptyCSS: ".tableexport-empty", // (selector, selector[]), selector(s) to replace cells with an empty string in the exported file(s)
+                trimWhitespace: false              // (Boolean), remove all leading/trailing newlines, spaces, and tabs from cell text in the exported file(s)
+            });
+            
+            obtenerLogsVar = obtenerLogsVar + 1;
         }
     });
 
@@ -454,204 +476,31 @@ function generarTexto(datos) {
         type: 'text/plain'
     });
 }
-/*
- * 
- * @returns {undefined}
- * función para acomodar la fehca
- */
-function acomodarValores() {
-//    console.log("Acomodar Valores");
-    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-    table = document.getElementById("dtBasicExample");
-    switching = true;
-    // Set the sorting direction to ascending:
-    dir = "asc";
-    /* Make a loop that will continue until
-     no switching has been done: */
-    while (switching) {
-        // Start by saying: no switching is done:
-        switching = false;
-        rows = table.rows;
-        /* Loop through all table rows (except the
-         first, which contains table headers): */
-        for (i = 1; i < (rows.length - 1); i++) {
-            // Start by saying there should be no switching:
-            shouldSwitch = false;
-            /* Get the two elements you want to compare,
-             one from current row and one from the next: */
-            n = 0;
-            x = rows[i].getElementsByTagName("TD")[n];
-//            console.log(x);
-            y = rows[i + 1].getElementsByTagName("TD")[n];
-//            console.log(y);
-            /* Check if the two rows should switch place,
-             based on the direction, asc or desc: */
-            if (dir === "asc") {
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                    // If so, mark as a switch and break the loop:
-                    shouldSwitch = true;
-                    break;
-                }
-            } else if (dir === "desc") {
-                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                    // If so, mark as a switch and break the loop:
-                    shouldSwitch = true;
-                    break;
-                }
-            }
-        }
-        if (shouldSwitch) {
-            /* If a switch has been marked, make the switch
-             and mark that a switch has been done: */
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-            switching = true;
-            // Each time a switch is done, increase this count by 1:
-            switchcount++;
-        } else {
-            /* If no switching has been done AND the direction is "asc",
-             set the direction to "desc" and run the while loop again. */
-            if (switchcount === 0 && dir === "asc") {
-                dir = "desc";
-                switching = true;
-            }
-        }
-    }
-}
-/*
- * 
- * @returns {undefined}
- * función para acomodar el nombre
- */
-function sortNombre() {
-//    console.log("Acomodar Nombre");
-    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-    table = document.getElementById("dtBasicExample");
-    switching = true;
-    // Set the sorting direction to ascending:
-    dir = "asc";
-    /* Make a loop that will continue until
-     no switching has been done: */
-    while (switching) {
-        // Start by saying: no switching is done:
-        switching = false;
-        rows = table.rows;
-        /* Loop through all table rows (except the
-         first, which contains table headers): */
-        for (i = 1; i < (rows.length - 1); i++) {
-            // Start by saying there should be no switching:
-            shouldSwitch = false;
-            /* Get the two elements you want to compare,
-             one from current row and one from the next: */
-            n = 4;
-            x = rows[i].getElementsByTagName("TD")[n];
-//            console.log(x);
-            y = rows[i + 1].getElementsByTagName("TD")[n];
-//            console.log(y);
-            /* Check if the two rows should switch place,
-             based on the direction, asc or desc: */
-            if (dir === "asc") {
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                    // If so, mark as a switch and break the loop:
-                    shouldSwitch = true;
-                    break;
-                }
-            } else if (dir === "desc") {
-                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                    // If so, mark as a switch and break the loop:
-                    shouldSwitch = true;
-                    break;
-                }
-            }
-        }
-        if (shouldSwitch) {
-            /* If a switch has been marked, make the switch
-             and mark that a switch has been done: */
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-            switching = true;
-            // Each time a switch is done, increase this count by 1:
-            switchcount++;
-        } else {
-            /* If no switching has been done AND the direction is "asc",
-             set the direction to "desc" and run the while loop again. */
-            if (switchcount === 0 && dir === "asc") {
-                dir = "desc";
-                switching = true;
-            }
-        }
-    }
-}
-/*
- * 
- * @returns {undefined}
- * Función para acomodar niveles
- */
-function sortNivel() {
-//    console.log("Acomodar Nombre");
-    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-    table = document.getElementById("dtBasicExample");
-    switching = true;
-    // Set the sorting direction to ascending:
-    dir = "asc";
-    /* Make a loop that will continue until
-     no switching has been done: */
-    while (switching) {
-        // Start by saying: no switching is done:
-        switching = false;
-        rows = table.rows;
-        /* Loop through all table rows (except the
-         first, which contains table headers): */
-        for (i = 1; i < (rows.length - 1); i++) {
-            // Start by saying there should be no switching:
-            shouldSwitch = false;
-            /* Get the two elements you want to compare,
-             one from current row and one from the next: */
-            n = 10;
-            x = rows[i].getElementsByTagName("TD")[n];
-//            console.log(x);
-            y = rows[i + 1].getElementsByTagName("TD")[n];
-//            console.log(y);
-            /* Check if the two rows should switch place,
-             based on the direction, asc or desc: */
-            if (dir === "asc") {
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                    // If so, mark as a switch and break the loop:
-                    shouldSwitch = true;
-                    break;
-                }
-            } else if (dir === "desc") {
-                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                    // If so, mark as a switch and break the loop:
-                    shouldSwitch = true;
-                    break;
-                }
-            }
-        }
-        if (shouldSwitch) {
-            /* If a switch has been marked, make the switch
-             and mark that a switch has been done: */
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-            switching = true;
-            // Each time a switch is done, increase this count by 1:
-            switchcount++;
-        } else {
-            /* If no switching has been done AND the direction is "asc",
-             set the direction to "desc" and run the while loop again. */
-            if (switchcount === 0 && dir === "asc") {
-                dir = "desc";
-                switching = true;
-            }
-        }
-    }
-}
-/*
- * 
- * @returns {undefined}
- * función para acomodar hora
- */
-function sortTableHora() {
 
+function sort(id) {
+    var column = document.getElementById(id).parentElement.parentElement.parentElement.parentElement;
+    var th = document.getElementById(id).parentElement;
+    if (th.id === 'Fecha') {
+        sortTable(column.id, 1);
+    }
+    if (th.id === 'Hora') {
+        sortTable(column.id, 3);
+    }
+    if (th.id === "Nombre") {
+        sortTable(column.id, 5);
+    }
+    if (th.id === "Instancia") {
+        sortTable(column.id, 9);
+    }
+
+
+//    sortTable(column.id, 9);
+}
+
+
+function sortTable(tableId, n) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-    table = document.getElementById("dtBasicExample");
+    table = document.getElementById(tableId);
     switching = true;
     // Set the sorting direction to ascending:
     dir = "asc";
@@ -668,21 +517,18 @@ function sortTableHora() {
             shouldSwitch = false;
             /* Get the two elements you want to compare,
              one from current row and one from the next: */
-            n = 0;
-            x = rows[i].children[1].innerText;
-//            console.log(x);
-            y = rows[i + 1].children[1].innerText;
-//            console.log(y);
+            x = rows[i].getElementsByTagName("TD")[n];
+            y = rows[i + 1].getElementsByTagName("TD")[n];
             /* Check if the two rows should switch place,
              based on the direction, asc or desc: */
             if (dir === "asc") {
-                if (x.toLowerCase() > y.toLowerCase()) {
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
                     // If so, mark as a switch and break the loop:
                     shouldSwitch = true;
                     break;
                 }
             } else if (dir === "desc") {
-                if (x.toLowerCase() < y.toLowerCase()) {
+                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
                     // If so, mark as a switch and break the loop:
                     shouldSwitch = true;
                     break;
@@ -706,3 +552,5 @@ function sortTableHora() {
         }
     }
 }
+
+

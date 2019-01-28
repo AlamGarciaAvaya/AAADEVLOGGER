@@ -4,13 +4,25 @@
  * and open the template in the editor.
  */
 
+//Absolute Path 14/01/2019
+var absolutepath = getAbsolutePath();
+console.log(absolutepath);
+function getAbsolutePath() {
+    var loc = window.location;
+    var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
+    return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
+}
+
+
 validarSession();
 
 function validarSession() {
     var session = sessionStorage.getItem('usuarioActivo');
     console.log(session);
+    var section = document.getElementById('section');
+    section.className += 'activeLink';
     if (session === "true") {
-       
+
     } else {
         window.location.href = "index.html";
     }
@@ -19,14 +31,20 @@ function validarSession() {
 function cerrarSesion() {
     sessionStorage.clear();
 }
+/*
+ * 
+ * Función para obtener la hora
+ */
+function mueveReloj() {
 
-//Absolute Path 14/01/2019
-var absolutepath = getAbsolutePath();
+    var today = new Date();
+    var todayThreeMinutesLess = new Date();
+    today = todayThreeMinutesLess.toLocaleString('en-US', {timeZone: 'America/Denver', hour12: false}).replace(', ', ' ');
 
-function getAbsolutePath() {
-    var loc = window.location;
-    var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
-    return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
+    horaImprimible = "Time Denver " + today;
+
+    document.form_reloj.reloj.value = horaImprimible;
+    setTimeout("mueveReloj()", 1000);
 }
 
 //Obtener datos del formulario
@@ -37,9 +55,14 @@ var action = formulario.getAttribute('action');
 //Variables para asignar EventListener a los botones con clase accordeon
 var acc = document.getElementsByClassName("accordion");
 let contador = 0;
+
 /*
  * Acordion
  */
+
+
+
+
 function Accordion() {
     for (var i = 0; i < acc.length; i++) {
 //        console.log("accordion");
@@ -53,7 +76,7 @@ function Accordion() {
             /* Toggle between hiding and showing the active panel */
             var panel = this.nextElementSibling;
             if (panel.style.display === "block") {
-    
+
                 panel.style.display = "none";
             } else {
 
@@ -68,6 +91,8 @@ function Accordion() {
     }
 
 }
+
+var tableNumber = 0;
 
 function doGetAAAEngagementLogs() {
     var fomulario = new FormData(formulario);
@@ -99,28 +124,28 @@ function doGetAAAEngagementLogs() {
             nuevoButton.setAttribute("class", "accordion " + object.filter);
             let nuevoDiv = document.createElement('DIV');
             nuevoDiv.setAttribute("class", "panel");
-            /*
-             * 
-             * Botones
-             */
-            let divBotones = document.createElement('DIV');
-            divBotones.setAttribute("class", "btn-group btn-group-lg");
-            //BOTON DESCARGAR
-            let botonDescargar = document.createElement('BUTTON');
-            botonDescargar.setAttribute("type", "button");
-            botonDescargar.setAttribute("class", "btn btn-default");
-            botonDescargar.setAttribute("id", object.filter + "descargar");
-            let textoBotonDescargar = document.createTextNode("Descargar");
-            botonDescargar.appendChild(textoBotonDescargar);
-
-            divBotones.appendChild(botonDescargar);
+//            /*
+//             * 
+//             * Botones
+//             */
+//            let divBotones = document.createElement('DIV');
+//            divBotones.setAttribute("class", "btn-group btn-group-lg");
+//            //BOTON DESCARGAR
+//            let botonDescargar = document.createElement('BUTTON');
+//            botonDescargar.setAttribute("type", "button");
+//            botonDescargar.setAttribute("class", "btn btn-default");
+//            botonDescargar.setAttribute("id", object.filter + "descargar");
+//            let textoBotonDescargar = document.createTextNode("Descargar");
+//            botonDescargar.appendChild(textoBotonDescargar);
+//
+//            divBotones.appendChild(botonDescargar);
             /*
              * 
              * Creación de la tabla
              */
             let table = document.createElement('TABLE');
             table.setAttribute("class", "table table-striped table-sm");
-            table.setAttribute("id", "dtBasicExample");
+            table.setAttribute("id", object.filter + tableNumber);
 
 
             let thead = document.createElement('THEAD');
@@ -128,20 +153,20 @@ function doGetAAAEngagementLogs() {
             //TH-RESULTADOS
             let thResultados = document.createElement('TH');
             thResultados.setAttribute("id", "th-sm" + object.filter);
-            let iResultados = document.createElement('i');
-            iResultados.setAttribute("class", "fa fa-sort float-right");
-            iResultados.setAttribute("aria-hidden", "true");
+//            let iResultados = document.createElement('i');
+//            iResultados.setAttribute("class", "fa fa-sort float-right");
+//            iResultados.setAttribute("aria-hidden", "true");
             let thResultadosTexto = document.createTextNode("Resultados");
-            thResultados.appendChild(iResultados);
+//            thResultados.appendChild(iResultados);
             thResultados.appendChild(thResultadosTexto);
             //TH-Numero-Resultados
             let thlineas = document.createElement('TH');
             thlineas.setAttribute("id", "th-sm1" + object.filter);
-            let ilineas = document.createElement('i');
-            ilineas.setAttribute("class", "fa fa-sort float-right");
-            ilineas.setAttribute("aria-hidden", "true");
+//            let ilineas = document.createElement('i');
+//            ilineas.setAttribute("class", "fa fa-sort float-right");
+//            ilineas.setAttribute("aria-hidden", "true");
             let thHoraTexto = document.createTextNode("Líneas");
-            thlineas.appendChild(ilineas);
+//            thlineas.appendChild(ilineas);
             thlineas.appendChild(thHoraTexto);
 
             //TBODY-Creanto atributos
@@ -159,7 +184,7 @@ function doGetAAAEngagementLogs() {
             table.appendChild(tbody);
             nuevoDiv.appendChild(table);
 
-            document.body.appendChild(divBotones);
+//            document.body.appendChild(divBotones);
             document.body.appendChild(nuevoButton);
             document.body.appendChild(nuevoDiv);
 
@@ -190,24 +215,24 @@ function doGetAAAEngagementLogs() {
                 tbodyelement.appendChild(nuevoTBodyTr);
             }
 
-            //DESCARGAR ARCHIVO
-            document.getElementById(object.filter + "descargar").addEventListener('click', function () {
-                var data = null;
-
-                var xhr = new XMLHttpRequest();
-                xhr.withCredentials = false;
-
-                xhr.addEventListener("readystatechange", function () {
-                    if (this.readyState === 4) {
-                        var lines = this.responseText.split('\n');
-                        descargarArchivo(generarTexto(lines), object.filter);
-                    }
-                });
-
-                xhr.open("GET", absolutepath+"EngagementDesignerLogs?number=" + object.number + "&filter=" + object.filter);
-                xhr.send(data);
-
-            }, false);
+//            //DESCARGAR ARCHIVO
+//            document.getElementById(object.filter + "descargar").addEventListener('click', function () {
+//                var data = null;
+//
+//                var xhr = new XMLHttpRequest();
+//                xhr.withCredentials = false;
+//
+//                xhr.addEventListener("readystatechange", function () {
+//                    if (this.readyState === 4) {
+//                        var lines = this.responseText.split('\n');
+//                        descargarArchivo(generarTexto(lines), object.filter);
+//                    }
+//                });
+//
+//                xhr.open("GET", absolutepath+"EngagementDesignerLogs?number=" + object.number + "&filter=" + object.filter);
+//                xhr.send(data);
+//
+//            }, false);
 
 
 
@@ -229,9 +254,24 @@ function doGetAAAEngagementLogs() {
                     panel.style.display = "block";
                 }
 
-            });            
-            contador++;
+            });
 
+            $("#" + object.filter + tableNumber.toString()).tableExport({
+                headings: true, // (Boolean), display table headings (th/td elements) in the <thead>
+                formats: ["xls", "txt"], // (String[]), filetypes for the export
+                fileName: String, // (id, String), filename for the downloaded file
+                bootstrap: true, // (Boolean), style buttons using bootstrap
+                position: "top", // (top, bottom), position of the caption element relative to table
+                ignoreRows: null, // (Number, Number[]), row indices to exclude from the exported file(s)
+                ignoreCols: null, // (Number, Number[]), column indices to exclude from the exported file(s)
+                ignoreCSS: ".tableexport-ignore", // (selector, selector[]), selector(s) to exclude from the exported file(s)
+                emptyCSS: ".tableexport-empty", // (selector, selector[]), selector(s) to replace cells with an empty string in the exported file(s)
+                trimWhitespace: false              // (Boolean), remove all leading/trailing newlines, spaces, and tabs from cell text in the exported file(s)
+            });
+
+
+            contador++;
+            tableNumber++;
         }
     });
 
@@ -288,66 +328,3 @@ function generarTexto(datos) {
     });
 }
 
-/*
- * 
- * @returns {undefined}
- * función para acomodar la fehca
- */
-function acomodarValores() {
-//    console.log("Acomodar Valores");
-    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-    table = document.getElementById("dtBasicExample");
-    switching = true;
-    // Set the sorting direction to ascending:
-    dir = "asc";
-    /* Make a loop that will continue until
-     no switching has been done: */
-    while (switching) {
-        // Start by saying: no switching is done:
-        switching = false;
-        rows = table.rows;
-        /* Loop through all table rows (except the
-         first, which contains table headers): */
-        for (i = 1; i < (rows.length - 1); i++) {
-            // Start by saying there should be no switching:
-            shouldSwitch = false;
-            /* Get the two elements you want to compare,
-             one from current row and one from the next: */
-            n = 0;
-            x = rows[i].getElementsByTagName("TD")[n];
-//            console.log(x);
-            y = rows[i + 1].getElementsByTagName("TD")[n];
-//            console.log(y);
-            /* Check if the two rows should switch place,
-             based on the direction, asc or desc: */
-            if (dir === "asc") {
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                    // If so, mark as a switch and break the loop:
-                    shouldSwitch = true;
-                    break;
-                }
-            } else if (dir === "desc") {
-                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                    // If so, mark as a switch and break the loop:
-                    shouldSwitch = true;
-                    break;
-                }
-            }
-        }
-        if (shouldSwitch) {
-            /* If a switch has been marked, make the switch
-             and mark that a switch has been done: */
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-            switching = true;
-            // Each time a switch is done, increase this count by 1:
-            switchcount++;
-        } else {
-            /* If no switching has been done AND the direction is "asc",
-             set the direction to "desc" and run the while loop again. */
-            if (switchcount === 0 && dir === "asc") {
-                dir = "desc";
-                switching = true;
-            }
-        }
-    }
-}

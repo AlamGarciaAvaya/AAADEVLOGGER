@@ -38,11 +38,11 @@ public class BreezeLogs extends HttpServlet {
 		String numberLines = request.getParameter("number");     
         String service = request.getParameter("service");
         String archivo = request.getParameter("archivo");
-		
+        String filtro = request.getParameter("filtro");
 		List<String> commands = new ArrayList<String>();
 		commands.add("/bin/sh");
 		commands.add("-c");
-		commands.add("tail -n -"+numberLines+" /var/log/Avaya/services/"+service+"/"+archivo);
+		commands.add("tail -n -"+numberLines+" /var/log/Avaya/services/"+service+"/"+archivo+" | grep "+filtro+"");
 
 		SystemCommandExecutor commandExecutor = new SystemCommandExecutor(
 				commands);

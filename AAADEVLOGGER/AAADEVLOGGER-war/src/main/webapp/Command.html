@@ -8,6 +8,7 @@
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/tableexport.min.css" >
         <link rel="stylesheet" href="css/style2.css">
 
 
@@ -18,9 +19,12 @@
             }
         </style>
     </head>
-    <body id="htmlBody">
+    <body id="htmlBody" onload="mueveReloj()">
 
         <div class="header">
+            <form name="form_reloj"> 
+                <input type="text" name="reloj" size="35" style="background-color : #cc0000; color : White; font-family : Verdana, Arial, Helvetica; font-size : 10pt; border: none; text-align : center; float: right" onfocus="window.document.form_reloj.reloj.blur()"> 
+            </form>
             <h1>AVAYA</h1>
             <p>Command</p>
         </div>
@@ -28,20 +32,29 @@
             <a href="logmenu.html">AAA Engagement Logs</a>
             <a href="logEngagement.html">Engagement Logs</a>
             <a href="breezeLogs.html">Breeze Logs</a>
-			<a href="RecordParticipant.html">Record Participant</a>
+            <a href="RecordParticipant.html">Record Participant</a>
             <a href="AAACallRecording.html">AAA Call Recording</a>
+            <a href="Command.html"id="section">Command</a>
             <a href="AAALogger.html" target="_blank" onclick="window.open(this.href, this.target, 'width=300,height=400'); return false;" class="right">Help</a>
-            <a href="index.html" class="right" onclick="cerrarSesion()">Cerrar Session</a>
+            <a href="index.html" class="right" onclick="cerrarSesion()">Close Session</a>
         </div>
 
         <form class="form-inline" action="https://breeze2-132.collaboratory.avaya.com/services/AAADEVNVP132/Command" method="get" id="fomulario_linux_command">
-            <label for="command">Comando:  </label>
-            <input type="text" id="command" placeholder="Linea de comando" name="command">
+            <label for="command">Command  </label>
+            <input type="text" id="command" placeholder="Command" name="command">
             <input type="submit" value="Submit" id="submit_linux_command" class="boton">
         </form>
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/xlsx.core.min.js"></script>
+        <script type="text/javascript" src="js/Blob.min.js"></script>
+        <script type="text/javascript" src="js/FileSaver.min.js"></script>
+        <script type="text/javascript" src="js/tableexport.min.js"></script>
+        <script src="js/app5.js"></script>
+
     </body>
-    <script src="js/app5.js"></script>
-    <script src="js/jquery.js"></script>
+
 
 </html>

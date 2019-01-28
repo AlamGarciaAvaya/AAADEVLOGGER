@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-//Obtener datos del formulario
-var sumbit = document.getElementById('submit_login');
-var formulario = document.getElementById('fomulario_login');
-var action = formulario.getAttribute('action');
 
-var absolutePath = getAbsolutePath();
+//Absolute Path 14/01/2019
+var absolutepath = getAbsolutePath();
+
+
 
 function getAbsolutePath() {
     var loc = window.location;
@@ -17,6 +16,13 @@ function getAbsolutePath() {
 }
 
 
+//Obtener datos del formulario
+var sumbit = document.getElementById('submit_login');
+var formulario = document.getElementById('fomulario_login');
+var action = formulario.getAttribute('action');
+//Obtener el Dominio
+var URLdomain = window.location.host;
+
 //Event Listener al botón Submit
 sumbit.addEventListener('click', function (e) {
     e.preventDefault();
@@ -24,16 +30,14 @@ sumbit.addEventListener('click', function (e) {
 });
 
 
-
 function doGetArchivo() {
+
     var fomulario = new FormData(formulario);
 //    console.log(formulario);
     var object = {};
     fomulario.forEach(function (value, key) {
         object[key] = value;
     });
-    console.log(object.email);
-
     var data = null;
 
     var xhr = new XMLHttpRequest();
@@ -42,15 +46,36 @@ function doGetArchivo() {
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
             var json = JSON.parse(this.responseText);
-
-            if (object.pais === "" || object.cliente === "" || object.email === "" || object.psw === "") {
+            console.log(object.pais);
+            if (object.pais === "" || object.pais.length === 0 || /^\s+$/.test(object.pais)) {
                 Swal({
                     type: 'error',
                     title: 'Error',
-                    text: 'Favor de llenar todos los campos',
+                    text: 'Favor de escribir en campo País'
 
                 });
+            } else if (object.cliente === "" || object.cliente.length === 0 || /^\s+$/.test(object.cliente) || object.cliente.match(/Avaya/) || object.cliente.match(/AVAYA/)) {
+                Swal({
+                    type: 'error',
+                    title: 'Error',
+                    text: 'Favor No indicar Avaya en la sección de Cliente'
+
+                });
+            } else if (!(/\S+@\S+\.\S+/.test(object.email))) {
+                Swal({
+                    type: 'error',
+                    title: 'Error',
+                    text: 'Favor llenar correctamente el campo de Email'
+
+                });
+            } else if (object.psw === "" || object.psw.length === 0 || /^\s+$/.test(object.psw)) {
+                Swal({
+                    type: 'error',
+                    title: 'Error',
+                    text: 'Favor de escribir en campo Password'
+                });
             } else {
+
                 for (var i = 0; i < json.length; i++) {
                     if (object.email === json[i].username && object.psw === json[i].password) {
                         console.log("Correcto");
@@ -69,15 +94,15 @@ function doGetArchivo() {
                         Swal({
                             type: 'error',
                             title: 'Error',
-                            text: 'Usuario y/o contrasseña incorrectos',
+                            text: 'Usuario y/o contrasseña incorrectos'
                         });
                     }
                 }
-
             }
         }
     });
-    xhr.open("GET", absolutePath+"ReadText/web/LogIn/Access.txt");
+
+    xhr.open("GET", "https://breeze2-132.collaboratory.avaya.com/services/AAADEVLOGGER/ReadText/web/LogIn/Access.txt");
 
     xhr.send(data);
 }
@@ -95,11 +120,11 @@ function makePost(usuario, pais, cliente) {
             console.log(this.responseText);
             var response = JSON.parse(this.responseText);
             console.log(response.status);
-           window.location.href = "logmenu.html";
+            window.location.href = "logmenu.html";
         }
     });
 
-    xhr.open("POST", absolutePath+"LogAccess?usuario=" + usuario +"&pais="+pais+"&cliente="+cliente);
+    xhr.open("POST", "https://breeze2-132.collaboratory.avaya.com/services/AAADEVLOGGER/LogAccess?usuario=" + usuario + "&pais=" + pais + "&cliente=" + cliente);
 
     xhr.send(data);
 }
